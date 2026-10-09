@@ -1,0 +1,1255 @@
+/* ==========================================================
+   ÖMER & ZELİHA - ÖZEL SÜRPRİZ WEB SİTESİ
+   Mobil Öncelikli, Lüks & Duygusal Tasarım Sistemi
+   ========================================================== */
+
+:root {
+    --bg-dark: #0a0812;
+    --bg-dark-secondary: #140d21;
+    --bg-gradient: radial-gradient(circle at 50% 20%, #221332 0%, #110b1a 60%, #08060e 100%);
+    
+    --rose-gold: #e29578;
+    --rose-gold-glow: rgba(226, 149, 120, 0.35);
+    --gold: #dfb15b;
+    --gold-soft: #f4d089;
+    --blush-pink: #ffb4a2;
+    --wine: #481d33;
+    
+    --card-glass: rgba(255, 255, 255, 0.04);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-border-gold: rgba(223, 177, 91, 0.25);
+    
+    --text-primary: #fffaf4;
+    --text-secondary: rgba(255, 250, 244, 0.72);
+    --text-muted: rgba(255, 250, 244, 0.45);
+    
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-script: 'Sacramento', cursive;
+    --font-quote: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    
+    --polaroid-bg: #fcfbf7;
+    --polaroid-text: #2d2621;
+    --polaroid-shadow: 0 14px 28px rgba(0, 0, 0, 0.4), 0 10px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================
+   RESET & TEMEL AYARLAR
+   ========================================================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    background-color: var(--bg-dark);
+}
+
+body {
+    font-family: var(--font-sans);
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Canvas Arka Plan Parçacıkları (Yıldızlar ve Kalpler) */
+#canvas-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Ana İçerik Taşıyıcısı */
+.site-main {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px 80px 16px;
+}
+
+/* ==========================================================
+   1. GİRİŞ EKRANI (AÇILIŞ ZARFI VE MÜHÜR)
+   ========================================================== */
+.intro-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #1b0f27 0%, #0d0714 80%, #050308 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.9s;
+}
+
+.intro-overlay.unlocked {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.intro-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 380px;
+    animation: fadeInScale 1.2s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Zarf & Mühür */
+.envelope-wrapper {
+    position: relative;
+    width: 170px;
+    height: 120px;
+    margin-bottom: 28px;
+    cursor: pointer;
+    transform: perspective(600px);
+    transition: transform 0.3s ease;
+}
+
+.envelope-wrapper:active {
+    transform: scale(0.96);
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #c45b73, #8a2d48);
+    border-radius: 8px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(226, 91, 115, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 85px solid transparent;
+    border-right: 85px solid transparent;
+    border-top: 65px solid #a63f58;
+    z-index: 2;
+    transform-origin: top;
+    transition: transform 0.5s ease;
+}
+
+.envelope-pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 85px solid #7c263f;
+    border-right: 85px solid #7c263f;
+    border-bottom: 60px solid #8f2e4b;
+    z-index: 3;
+}
+
+.wax-seal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 52px;
+    background: radial-gradient(circle, #ffd482, #c78b27);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+    animation: sealPulse 2.4s infinite ease-in-out;
+}
+
+.seal-heart {
+    color: #5c182b;
+    font-size: 24px;
+    line-height: 1;
+}
+
+@keyframes sealPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 15px rgba(244, 208, 137, 0.4);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.08);
+        box-shadow: 0 0 28px rgba(244, 208, 137, 0.8);
+    }
+}
+
+.intro-for {
+    font-family: var(--font-script);
+    font-size: 2rem;
+    color: var(--rose-gold);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.intro-title {
+    font-family: var(--font-serif);
+    font-size: 1.65rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.intro-hint {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #e29578, #c86d56);
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(226, 149, 120, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.open-btn:active {
+    transform: scale(0.96);
+}
+
+/* ==========================================================
+   2. YÜZEN MÜZİK KONTROLÜ (MUSIC PILL)
+   ========================================================== */
+.music-pill {
+    position: fixed;
+    top: 18px;
+    right: 16px;
+    z-index: 100;
+    background: rgba(22, 14, 34, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border-gold);
+    border-radius: 999px;
+    padding: 6px 14px 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.vinyl-disc {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #333 30%, #111 60%, #000 100%);
+    border: 2px solid #555;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spinVinyl 3.5s linear infinite;
+    animation-play-state: paused;
+}
+
+.vinyl-disc.playing {
+    animation-play-state: running;
+}
+
+.vinyl-center {
+    width: 10px;
+    height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+}
+
+@keyframes spinVinyl {
+    100% { transform: rotate(360deg); }
+}
+
+.music-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.music-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.music-status {
+    font-size: 0.65rem;
+    color: var(--gold-soft);
+    line-height: 1.2;
+}
+
+.music-toggle {
+    background: none;
+    border: none;
+    color: var(--rose-gold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================
+   3. HERO / KARŞILAMA BÖLÜMÜ
+   ========================================================== */
+.hero-section {
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 30px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(223, 177, 91, 0.12);
+    border: 1px solid rgba(223, 177, 91, 0.3);
+    color: var(--gold-soft);
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.badge-sparkle {
+    color: var(--gold);
+    font-size: 0.85rem;
+}
+
+.hero-names {
+    font-family: var(--font-serif);
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #fffaf4 20%, #f7d2be 60%, #dfb15b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.hero-subtitle {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto 32px auto;
+}
+
+/* Hero Baş Çerçevesi (Düğün Fotoğrafı) */
+.hero-frame-container {
+    max-width: 440px;
+    margin: 0 auto 36px auto;
+}
+
+.hero-frame {
+    position: relative;
+    border-radius: 20px;
+    padding: 8px;
+    background: linear-gradient(135deg, rgba(223, 177, 91, 0.4), rgba(226, 149, 120, 0.2), rgba(255, 255, 255, 0.05));
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(223, 177, 91, 0.15);
+}
+
+.hero-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+}
+
+.hero-frame-caption {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--gold-soft);
+    margin-top: 14px;
+}
+
+.caption-quote {
+    color: var(--rose-gold);
+    font-size: 1.4rem;
+}
+
+/* ==========================================================
+   4. BİRLİKTE GEÇEN ZAMAN SAYACI (COUNTER)
+   ========================================================== */
+.counter-card {
+    background: rgba(255, 255, 255, 0.035);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border-gold);
+    border-radius: 20px;
+    padding: 24px 16px;
+    max-width: 520px;
+    margin: 0 auto;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+}
+
+.counter-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--rose-gold);
+    margin-bottom: 18px;
+}
+
+.heart-pulse {
+    animation: heartPulseAnim 1.6s infinite ease-in-out;
+}
+
+@keyframes heartPulseAnim {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+}
+
+.counter-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.counter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 62px;
+    padding: 10px 6px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+}
+
+.counter-val {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.counter-tag {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-soft);
+    margin-top: 4px;
+}
+
+.counter-divider {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--rose-gold);
+    font-weight: 600;
+    margin-top: -12px;
+}
+
+.counter-note {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-top: 16px;
+}
+
+/* ==========================================================
+   BÖLÜM BAŞLIKLARI (SECTION HEADINGS)
+   ========================================================== */
+.section {
+    padding: 55px 0 20px 0;
+}
+
+.section-title-wrap {
+    text-align: center;
+    margin-bottom: 34px;
+}
+
+.section-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--rose-gold);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 2.1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--text-primary);
+}
+
+.title-decor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 12px 0 14px 0;
+}
+
+.title-decor .line {
+    width: 44px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--rose-gold), transparent);
+}
+
+.title-decor .heart {
+    color: var(--rose-gold);
+    font-size: 0.9rem;
+}
+
+.section-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+/* ==========================================================
+   5. POLAROID GALERİ DÜZENİ (KUSURSUZ MOBİL UYUM)
+   ========================================================== */
+.polaroid-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 26px;
+    margin-top: 10px;
+}
+
+@media (min-width: 600px) {
+    .polaroid-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+}
+
+.polaroid-card {
+    cursor: pointer;
+    perspective: 1000px;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.polaroid-card:active {
+    transform: scale(0.98);
+}
+
+.polaroid-inner {
+    position: relative;
+    background: var(--polaroid-bg);
+    padding: 12px 12px 18px 12px;
+    border-radius: 4px;
+    box-shadow: var(--polaroid-shadow);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Doğal Hafif Eğiklik (Nostaljik Polaroid Hissi) */
+.polaroid-card:nth-child(even) .polaroid-inner {
+    transform: rotate(1.2deg);
+}
+.polaroid-card:nth-child(odd) .polaroid-inner {
+    transform: rotate(-1.1deg);
+}
+
+@media (hover: hover) {
+    .polaroid-card:hover .polaroid-inner {
+        transform: translateY(-8px) rotate(0deg) scale(1.02);
+        box-shadow: 0 22px 40px rgba(0, 0, 0, 0.55), 0 0 20px rgba(226, 149, 120, 0.2);
+    }
+}
+
+/* Üst Bant / Tape Sticker */
+.tape-sticker {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 68px;
+    height: 20px;
+    background: rgba(245, 235, 220, 0.65);
+    backdrop-filter: blur(2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    opacity: 0.85;
+}
+
+/* Görsel Konteyneri: ASLA SÜNDÜRMEZ, DOĞRU KIRPMA YAPAR */
+.img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: #222;
+    border-radius: 2px;
+}
+
+.img-wrapper.landscape-aspect {
+    aspect-ratio: 4/3;
+}
+
+.img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+@media (hover: hover) {
+    .polaroid-card:hover .img-wrapper img {
+        transform: scale(1.05);
+    }
+}
+
+.polaroid-meta {
+    padding-top: 14px;
+    text-align: center;
+}
+
+.polaroid-caption {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--polaroid-text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.polaroid-date {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #665c54;
+    line-height: 1.3;
+}
+
+.gallery-hint {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--gold-soft);
+    margin-top: 28px;
+    opacity: 0.8;
+}
+
+/* ==========================================================
+   6. SENİ NEDEN SEVİYORUM? FLIP KARTLAR
+   ========================================================== */
+.reasons-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .reasons-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+.reason-card {
+    height: 190px;
+    perspective: 1000px;
+    cursor: pointer;
+    outline: none;
+}
+
+.reason-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 18px;
+}
+
+.reason-card.flipped .reason-card-inner,
+.reason-card:focus .reason-card-inner {
+    transform: rotateY(180deg);
+}
+
+@media (hover: hover) {
+    .reason-card:hover .reason-card-inner {
+        transform: rotateY(180deg);
+    }
+}
+
+.reason-card-front,
+.reason-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 18px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.reason-card-front {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--card-border-gold);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.reason-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+
+.reason-num {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--rose-gold);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.reason-card-front h3 {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.tap-label {
+    font-size: 0.72rem;
+    color: var(--gold-soft);
+    margin-top: 8px;
+    opacity: 0.8;
+}
+
+.reason-card-back {
+    background: linear-gradient(135deg, #2b1429, #1c0e24);
+    border: 1px solid var(--rose-gold);
+    transform: rotateY(180deg);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(226, 149, 120, 0.25);
+}
+
+.reason-card-back p {
+    font-family: var(--font-quote);
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-style: italic;
+}
+
+/* ==========================================================
+   7. LÜKS AŞK MEKTUBU (PARCHMENT LETTER)
+   ========================================================== */
+.parchment-letter {
+    position: relative;
+    background: #fbf7ee;
+    color: #2b231d;
+    border-radius: 12px;
+    padding: 38px 26px 34px 26px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 80px rgba(220, 200, 170, 0.35);
+    border: 1px solid rgba(200, 180, 150, 0.6);
+    margin-top: 10px;
+}
+
+.letter-stamp {
+    position: absolute;
+    top: -18px;
+    right: 28px;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #b93f5b, #7d1a33);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffd894;
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 216, 148, 0.5);
+}
+
+.letter-header {
+    border-bottom: 1px solid rgba(138, 114, 88, 0.2);
+    padding-bottom: 16px;
+    margin-bottom: 22px;
+}
+
+.letter-salutation {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #3f222d;
+    margin-bottom: 4px;
+}
+
+.letter-date {
+    display: block;
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #796655;
+}
+
+.letter-body {
+    font-family: var(--font-quote);
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: #2b231d;
+}
+
+.letter-body p {
+    margin-bottom: 16px;
+}
+
+.letter-signature {
+    margin-top: 28px;
+    text-align: right;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(138, 114, 88, 0.25);
+}
+
+.sig-title {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #635243;
+}
+
+.sig-name {
+    font-family: var(--font-script);
+    font-size: 2.4rem;
+    color: #8c2a44;
+    line-height: 1.1;
+    margin-top: 4px;
+}
+
+/* ==========================================================
+   8. İNTERAKTİF SEVGİ ÖLÇER / SÜRPRİZ BUTONU
+   ========================================================== */
+.love-meter-card {
+    background: rgba(255, 255, 255, 0.035);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border-gold);
+    border-radius: 24px;
+    padding: 34px 20px;
+    text-align: center;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+}
+
+.love-meter-title {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.love-meter-sub {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    max-width: 420px;
+    margin: 0 auto 24px auto;
+}
+
+.love-burst-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #e6396e, #c02050);
+    color: #fff;
+    border: none;
+    padding: 16px 38px;
+    border-radius: 999px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(230, 57, 110, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.love-burst-btn:active {
+    transform: scale(0.94);
+}
+
+.btn-heart-icon {
+    font-size: 1.35rem;
+}
+
+.love-counter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 8px 18px;
+    border-radius: 999px;
+    margin-top: 20px;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.love-counter-pill strong {
+    color: var(--rose-gold);
+    font-size: 1.1rem;
+}
+
+.love-message-box {
+    margin-top: 18px;
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--gold-soft);
+    min-height: 28px;
+    transition: opacity 0.3s;
+}
+
+/* ==========================================================
+   9. FOOTER / KAPANIŞ
+   ========================================================== */
+.site-footer {
+    text-align: center;
+    padding: 40px 16px 20px 16px;
+}
+
+.footer-heart {
+    font-size: 1.8rem;
+    animation: heartPulseAnim 1.6s infinite ease-in-out;
+    margin-bottom: 10px;
+}
+
+.footer-quote {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--gold-soft);
+    margin-bottom: 8px;
+}
+
+.footer-copyright {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================
+   10. TAM EKRAN LIGHTBOX (KUSURSUZ MOBİL GÖRÜNTÜLEYİCİ)
+   ========================================================== */
+.lightbox-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(7, 4, 12, 0.96);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002;
+}
+
+.lightbox-content {
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lightbox-image-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lightbox-image-box img {
+    max-width: 100%;
+    max-height: 72vh;
+    object-fit: contain; /* ASLA KESİLMEZ VEYA SÜNDÜRÜLMEZ */
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    transition: transform 0.25s ease;
+}
+
+.lightbox-caption-bar {
+    margin-top: 16px;
+    text-align: center;
+    max-width: 90%;
+}
+
+.lightbox-caption-bar h4 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.lightbox-caption-bar p {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--gold-soft);
+}
+
+.lightbox-nav {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10001;
+}
+
+.lightbox-nav.prev {
+    left: -12px;
+}
+
+.lightbox-nav.next {
+    right: -12px;
+}
+
+@media (max-width: 600px) {
+    .lightbox-nav.prev {
+        left: 4px;
+    }
+    .lightbox-nav.next {
+        right: 4px;
+    }
+}
+
+.lightbox-counter {
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+}
+
+/* ==========================================================
+   UÇAN KALP ANİMASYONLARI (HEART BURST PARTICLES)
+   ========================================================== */
+.floating-heart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 24px;
+    z-index: 99999;
+    user-select: none;
+    animation: floatHeartUp 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes floatHeartUp {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+    }
+    50% {
+        opacity: 0.9;
+        transform: translate(calc(-50% + (var(--tx, 0px))), calc(-50% - 80px)) scale(1.2) rotate(var(--rot, 15deg));
+    }
+    100% {
+        opacity: 0;
+        transform: translate(calc(-50% + (var(--tx, 0px) * 1.5)), calc(-50% - 170px)) scale(0.8) rotate(calc(var(--rot, 15deg) * 2));
+    }
+}
+
+/* ==========================================================
+   11. WHATSAPP ETKİLEŞİM BÖLÜMÜ (ÖZEL MOBİL CTA)
+   ========================================================== */
+.whatsapp-section {
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.whatsapp-card {
+    background: linear-gradient(135deg, rgba(37, 211, 102, 0.08), rgba(18, 140, 126, 0.12), rgba(255, 255, 255, 0.03));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(37, 211, 102, 0.35);
+    border-radius: 24px;
+    padding: 34px 22px;
+    text-align: center;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 30px rgba(37, 211, 102, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.wa-icon-glow {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 16px auto;
+    background: radial-gradient(circle, #25D366, #128C7E);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+    animation: waPulse 2.2s infinite ease-in-out;
+}
+
+@keyframes waPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 16px rgba(37, 211, 102, 0.4);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 32px rgba(37, 211, 102, 0.75);
+    }
+}
+
+.wa-title {
+    font-family: var(--font-serif);
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.wa-sub {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    max-width: 440px;
+    margin: 0 auto 24px auto;
+}
+
+.wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #25D366, #1ebd5b);
+    color: #ffffff;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 16px 36px;
+    border-radius: 999px;
+    box-shadow: 0 10px 28px rgba(37, 211, 102, 0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.wa-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+}
+
+@media (hover: hover) {
+    .wa-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(37, 211, 102, 0.6);
+    }
+}

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Zeliha & Ömer | Sonsuz Masalımız</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Arka Plan Efekti: Parıldayan Yıldızlar ve Yüzen Kalpler -->
+    <canvas id="canvas-bg"></canvas>
+
+    <!-- 1. GİRİŞ & SÜRPRİZ KİLİDİ (MOBİL VE MASAÜSTÜ İÇİN EŞSİZ AÇILIŞ) -->
+    <div id="intro-overlay" class="intro-overlay">
+        <div class="intro-content">
+            <div class="envelope-wrapper">
+                <div class="envelope" id="envelope-trigger">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-pocket"></div>
+                    <div class="wax-seal">
+                        <span class="seal-heart">❤</span>
+                        <div class="seal-glow"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="intro-for">Güzel Hatunum İçin...</p>
+            <h1 class="intro-title">Sana Küçük Bir Sürprizim Var Aşkım</h1>
+            <p class="intro-hint">Mektubumuzu açmak için mühre dokun sevgilim ✨</p>
+            <button id="open-btn" class="open-btn">
+                <span>Aşkla Aç Sevgilim</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- MÜZİK KONTROLÜ (SAĞ ÜST SABİT ÇALAR) -->
+    <div class="music-pill" id="music-pill" title="Müziği Aç / Kapat">
+        <div class="vinyl-disc" id="vinyl-disc">
+            <div class="vinyl-center"></div>
+        </div>
+        <div class="music-info">
+            <span class="music-label">Bizim Şarkımız</span>
+            <span class="music-status" id="music-status">Çalıyor...</span>
+        </div>
+        <button class="music-toggle" id="music-toggle" aria-label="Müzik Aç/Kapat">
+            <svg id="music-icon-playing" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <svg id="music-icon-muted" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- SES DOSYASI -->
+    <audio id="audio-player" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ANA İÇERİK KONTEYNERİ -->
+    <main class="site-main">
+
+        <!-- HERO / KARŞILAMA BÖLÜMÜ -->
+        <header class="hero-section">
+            <div class="hero-badge">
+                <span class="badge-sparkle">✦</span>
+                <span>Ömer &amp; Zeliha</span>
+                <span class="badge-sparkle">✦</span>
+            </div>
+            <h1 class="hero-names">İyi Ki Varsın Aşkım</h1>
+            <p class="hero-subtitle">"Hayatımın en güzel dönüm noktası, huzurum, bir tanem..."</p>
+            
+            <div class="hero-frame-container">
+                <div class="hero-frame">
+                    <img src="photos/04_wedding.jpg" alt="Ömer ve Zeliha" class="hero-img" loading="eager">
+                    <div class="frame-glimmer"></div>
+                </div>
+                <div class="hero-frame-caption">
+                    <span class="caption-quote">“</span>
+                    Hayatımın en güzel 'Evet'i olacak... Sabırsızlıkla bekliyorum o günü aşkım.
+                    <span class="caption-quote">”</span>
+                </div>
+            </div>
+
+            <!-- BİRLİKTE GEÇEN ZAMAN SAYACI -->
+            <div class="counter-card">
+                <div class="counter-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="heart-pulse">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span>19 Temmuz'dan Beri Geçen Her Anımız</span>
+                </div>
+                <div class="counter-grid">
+                    <div class="counter-item">
+                        <span class="counter-val" id="count-days">--</span>
+                        <span class="counter-tag">Gün</span>
+                    </div>
+                    <div class="counter-divider">:</div>
+                    <div class="counter-item">
+                        <span class="counter-val" id="count-hours">--</span>
+                        <span class="counter-tag">Saat</span>
+                    </div>
+                    <div class="counter-divider">:</div>
+                    <div class="counter-item">
+                        <span class="counter-val" id="count-minutes">--</span>
+                        <span class="counter-tag">Dakika</span>
+                    </div>
+                    <div class="counter-divider">:</div>
+                    <div class="counter-item">
+                        <span class="counter-val" id="count-seconds">--</span>
+                        <span class="counter-tag">Saniye</span>
+                    </div>
+                </div>
+                <p class="counter-note">Ve kalbimin attığı her saniye seni dünkünden daha çok severek...</p>
+            </div>
+        </header>
+
+        <!-- FOTOĞRAF GALERİSİ & EN GÜZEL ANILARIMIZ -->
+        <section class="section gallery-section" id="gallery">
+            <div class="section-title-wrap">
+                <span class="section-eyebrow">En Güzel Anlarımız</span>
+                <h2 class="section-title">Seninle Her Anım Bir Masal</h2>
+                <div class="title-decor">
+                    <span class="line"></span>
+                    <span class="heart">❤</span>
+                    <span class="line"></span>
+                </div>
+                <p class="section-desc">Gözlerin, gülüşün ve seninle geçirdiğim her saniye benim en kıymetli hazinem hatunum...</p>
+            </div>
+
+            <!-- FOTOĞRAF KARTLARI -->
+            <div class="polaroid-grid">
+                
+                <!-- 1. Fotoğraf: Düğün / Gelecek Hayalimiz -->
+                <article class="polaroid-card" data-idx="0">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/04_wedding.jpg" alt="Bizim Geleceğimiz" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Hayatımın En Güzel 'Evet'i Olacak</h3>
+                            <p class="polaroid-date">Sabırsızlıkla bekliyorum o günü aşkım...</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2. Fotoğraf: Gece & Deniz -->
+                <article class="polaroid-card" data-idx="1">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/02_night_sea.jpg" alt="Gece Sahili" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Denizin Huzuru, Gözlerinin Işığı</h3>
+                            <p class="polaroid-date">Karanlıkta bile dünyamı aydınlatan güzelliğin...</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 3. Fotoğraf: Doğum Günü Pastası -->
+                <article class="polaroid-card" data-idx="2">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/06_birthday.jpg" alt="Doğum Günü Dileği" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Tuttuğun Her Dilek Olmak...</h3>
+                            <p class="polaroid-date">İyi ki doğdun sevgilim, iyi ki hayatıma geldin.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 4. Fotoğraf: Nostaljik / Retro Köşe -->
+                <article class="polaroid-card" data-idx="3">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/08_vintage_retro.jpg" alt="Nostaljik Anımız" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Hangi Çağda Olsak Yine Biz</h3>
+                            <p class="polaroid-date">Yıllar geçse de eskimeyecek tek şey bu aşk hatunum.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 5. Fotoğraf: Göl & Sandal -->
+                <article class="polaroid-card" data-idx="4">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper landscape-aspect">
+                            <img src="photos/03_lake_boat.jpg" alt="Göl Kenarı Gezintisi" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Zamanın Durduğu O Huzur</h3>
+                            <p class="polaroid-date">Sadece seninle baş başa olmak bütün dünyaya bedel...</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 6. Fotoğraf: Golden Hour / Gün Işığı -->
+                <article class="polaroid-card" data-idx="5">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/09_golden_hour.jpg" alt="Gün Işığında Sen" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Yüzüne Vuran O Sıcak Güneş</h3>
+                            <p class="polaroid-date">Gözlerindeki o sıcaklık içimi ısıtmaya yeter aşkım.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 7. Fotoğraf: Yolculuk & Gülümseme -->
+                <article class="polaroid-card" data-idx="6">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/01_car_smile.jpg" alt="Birlikte Yollarda" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Sen Yanımdayken Her Yol Cennet</h3>
+                            <p class="polaroid-date">Arabada dinlediğimiz şarkılar, senin o güzel gülüşün...</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 8. Fotoğraf: Siyah & Beyaz Sahil -->
+                <article class="polaroid-card" data-idx="7">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/10_black_white.jpg" alt="Siyah Beyaz Hatıramız" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Renklere İhtiyaç Duymayan Sevdamız</h3>
+                            <p class="polaroid-date">Çünkü hayatıma kattığın tüm renkler kalbimde aşkım.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 9. Fotoğraf: Yaz Akşamı Park -->
+                <article class="polaroid-card" data-idx="8">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper">
+                            <img src="photos/07_summer_night.jpg" alt="Yaz Akşamı" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">En Güvenli Sığınağım</h3>
+                            <p class="polaroid-date">Dünyanın bütün gürültüsünden uzak, sadece senin yanında huzur...</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 10. Fotoğraf: Yolculuk İkilisi -->
+                <article class="polaroid-card" data-idx="9">
+                    <div class="polaroid-inner">
+                        <div class="tape-sticker"></div>
+                        <div class="img-wrapper landscape-aspect">
+                            <img src="photos/05_road_trip.jpg" alt="Birlikte Yeni Keşifler" loading="lazy">
+                        </div>
+                        <div class="polaroid-meta">
+                            <h3 class="polaroid-caption">Birlikte Güldüğümüz Her An</h3>
+                            <p class="polaroid-date">Gideceğimiz yol değil, seninle gitmekti beni mutlu eden...</p>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+            
+            <p class="gallery-hint">💡 Fotoğraflara dokunarak tam ekran büyütebilir ve kaydırabilirsin sevgilim.</p>
+        </section>
+
+        <!-- SENİ NEDEN SEVİYORUM? İNTERAKTİF KARTLAR -->
+        <section class="section reasons-section">
+            <div class="section-title-wrap">
+                <span class="section-eyebrow">İçimden Gelenler</span>
+                <h2 class="section-title">Seni Neden Bu Kadar Çok Seviyorum?</h2>
+                <div class="title-decor">
+                    <span class="line"></span>
+                    <span class="heart">❤</span>
+                    <span class="line"></span>
+                </div>
+                <p class="section-desc">Saymaya kalksam ömrüm yetmez ama içimden taşan birkaç şeyi buraya yazmak istedim hatunum... (Kartlara dokun)</p>
+            </div>
+
+            <div class="reasons-grid">
+                
+                <div class="reason-card" tabindex="0">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <div class="reason-icon">✨</div>
+                            <span class="reason-num">01</span>
+                            <h3>Huzurun Ta Kendisi Olman</h3>
+                            <p class="tap-label">Dokun ve Gör Aşkım</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Bütün günün yorgunluğunu üzerimden alan tek şey, bir tebessümün ve bana sarılışın. Senin yanın benim bu hayattaki tek evim sevgilim.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" tabindex="0">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <div class="reason-icon">🌸</div>
+                            <span class="reason-num">02</span>
+                            <h3>O Eşsiz Gülüşün</h3>
+                            <p class="tap-label">Dokun ve Gör Aşkım</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Gözlerinin içiyle güldüğün o anlar var ya... İçimde binlerce çiçek birden açıyor. Senin gülüşün bana bu dünyadaki en büyük yaşama sevinci hatunum.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" tabindex="0">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <div class="reason-icon">💫</div>
+                            <span class="reason-num">03</span>
+                            <h3>En Sade Anı Bile Güzelleştirmen</h3>
+                            <p class="tap-label">Dokun ve Gör Aşkım</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Arabada giderken, yol kenarında otururken ya da sadece baş başa susarken bile... Seninle olmak en sıradan dakikaları bile unutulmaz kılıyor.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" tabindex="0">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <div class="reason-icon">🤝</div>
+                            <span class="reason-num">04</span>
+                            <h3>Bana Verdiğin Güç</h3>
+                            <p class="tap-label">Dokun ve Gör Aşkım</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Sen arkamda durduğunda, elimi tuttuğunda aşamayacağım hiçbir zorluk yok. Bana kendimi dünyanın en şanslı ve en güçlü adamı hissettiriyorsun sevgilim.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" tabindex="0">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <div class="reason-icon">💍</div>
+                            <span class="reason-num">05</span>
+                            <h3>Geleceğim ve Hayalim Olman</h3>
+                            <p class="tap-label">Dokun ve Gör Aşkım</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Gözlerimi kapatıp geleceği hayal ettiğimde gördüğüm tek şey sensin; yine senin elini tuttuğum, birlikte yaşlanacağımız o harika günler aşkım.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" tabindex="0">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <div class="reason-icon">🕊️</div>
+                            <span class="reason-num">06</span>
+                            <h3>Sadece 'Sen' Olduğun İçin</h3>
+                            <p class="tap-label">Dokun ve Gör Aşkım</p>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Kalbinin güzelliği, merhametin, tatlılığın ve her halinle beni tamamlaman... Seni sadece sevmiyorum, sana her gün yeniden aşık oluyorum hatunum.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ÖMER'DEN ZELİHA'YA MEKTUP -->
+        <section class="section letter-section">
+            <div class="parchment-letter">
+                <div class="letter-stamp">
+                    <span>Ö &amp; Z</span>
+                </div>
+                <div class="letter-header">
+                    <span class="letter-salutation">Aşkım, Sevgilim, Güzel Hatunum,</span>
+                    <span class="letter-date">Bugün ve Bir Ömür Boyu</span>
+                </div>
+                <div class="letter-body">
+                    <p>
+                        Bunu senin o dünyalar güzeli yüzün birazcık gülümsesin, sana olan sevgimi her an yanında hisset diye kendi ellerimle yaptım aşkım.
+                    </p>
+                    <p>
+                        Hayat bazen yorucu, bazen koşturmacalı olabiliyor ama günün sonunda senin sesini duymak, gözlerine bakıp <em>"İyi ki yanımdasın"</em> diyebilmek benim bu dünyadaki en büyük servetim. Arabada söylediğimiz şarkılardan o hayalini kurduğumuz düğün günümüze kadar her anımız kalbimin en derin yerinde.
+                    </p>
+                    <p>
+                        O gelinlikle karşıma çıkacağın anı, gözlerinin içine bakıp sana bir ömür 'Evet' diyeceğimiz günü sabırsızlıkla ve büyük bir heyecanla bekliyorum sevgilim. Sen benim her şeyim, en güzel yol arkadaşımsın.
+                    </p>
+                    <p>
+                        Seni dünden çok, yarından az... Bütün kalbimle ve her nefesimde çok seviyorum hatunum.
+                    </p>
+                </div>
+                <div class="letter-signature">
+                    <p class="sig-title">Daima ve Sadece Senin Olan,</p>
+                    <p class="sig-name">Ömer'in</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- İNTERAKTİF SEVGİ ÖLÇER / SÜRPRİZ BUTONU -->
+        <section class="section love-meter-section">
+            <div class="love-meter-card">
+                <h3 class="love-meter-title">Kalbimi Sana Gönderiyorum</h3>
+                <p class="love-meter-sub">Butona her dokunduğunda sana olan sevgimin bir parçası gökyüzüne uçuyor sevgilim...</p>
+                
+                <button id="love-burst-btn" class="love-burst-btn" aria-label="Sevgi Gönder">
+                    <span class="btn-heart-icon">💖</span>
+                    <span class="btn-text">Seni Seviyorum Aşkım</span>
+                </button>
+
+                <div class="love-counter-pill">
+                    <span>Gönderilen Sevgi:</span>
+                    <strong id="love-click-count">100%</strong>
+                </div>
+
+                <div id="love-message" class="love-message-box">
+                    "Sonsuzluk bile sana olan sevgimi anlatmaya yetmez aşkım..."
+                </div>
+            </div>
+        </section>
+
+        <!-- WHATSAPP ETKİLEŞİM KARTI (DOĞRUDAN ÖMER'E MESAJ ATMA) -->
+        <section class="section whatsapp-section">
+            <div class="whatsapp-card">
+                <div class="wa-icon-glow">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+                    </svg>
+                </div>
+                <h3 class="wa-title">Şimdi Bana Sarılmak İster misin?</h3>
+                <p class="wa-sub">Sürprizimi beğendiysen bana hemen WhatsApp'tan yaz sevgilim ❤️</p>
+                
+                <a href="https://wa.me/905382616437?text=A%C5%9Fk%C4%B1m%20s%C3%BCrprizine%20bay%C4%B1ld%C4%B1m%2C%20seni%20%C3%A7ok%20seviyorum!%20%E2%9D%A4%EF%B8%8F" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="wa-btn">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+                    </svg>
+                    <span>Ömer'ine Mesaj Gönder</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- FOOTER / KAPANIŞ -->
+        <footer class="site-footer">
+            <div class="footer-heart">❤️</div>
+            <p class="footer-quote">"İki kalp, tek bir masal..."</p>
+            <p class="footer-copyright">Sonsuza kadar sadece senin Ömer'in ❤️ Seni çok seviyorum hatunum.</p>
+        </footer>
+
+    </main>
+
+    <!-- TAM EKRAN FOTOĞRAF GÖRÜNTÜLEYİCİ (LIGHTBOX - KUSURSUZ MOBİL DETAYI) -->
+    <div id="lightbox-modal" class="lightbox-modal" aria-hidden="true">
+        <button class="lightbox-close" id="lightbox-close" aria-label="Kapat">&times;</button>
+        
+        <div class="lightbox-content">
+            <button class="lightbox-nav prev" id="lightbox-prev" aria-label="Önceki">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            
+            <div class="lightbox-image-box">
+                <img id="lightbox-img" src="" alt="Tam Boyut Anı">
+                <div class="lightbox-caption-bar">
+                    <h4 id="lightbox-title">Fotoğraf Başlığı</h4>
+                    <p id="lightbox-desc">Açıklama</p>
+                </div>
+            </div>
+
+            <button class="lightbox-nav next" id="lightbox-next" aria-label="Sonraki">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </div>
+        
+        <div class="lightbox-counter" id="lightbox-counter">1 / 10</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
